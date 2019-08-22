@@ -1,0 +1,84 @@
+#!/usr/bin/env node
+
+var app = require('../app');
+var debug = require('debug')('picrossjs:server');
+var http = require('http');
+var https = require('https');
+var fs = require('fs');
+
+const port_http = process.env.PORT || 80;
+const port_https = process.env.PORT || 443;
+app.set('port', port_http);
+app.set('port', port_https);
+
+var path = require('path');
+var options = {
+    ca: fs.readFileSync(path.resolve('./ssl/www_picross_io.ca-bundle'), 'utf8'),
+    key: fs.readFileSync(path.resolve('./ssl/www_picross_io.key'), 'utf8'),
+    cert: fs.readFileSync(path.resolve('./ssl/www_picross_io.crt'), 'utf8')
+};
+
+var server_https = https.createServer(options, app);
+var server_http = http.createServer(app);
+// var server_http = http.createServer(function (req, res) {
+//     res.writeHead(301, {"Location": "https://" + req.headers['host'] + req.url});
+//     res.end();
+// });
+
+//app.io.attach(server_https);
+app.io.attach(server_http);
+
+server_http.listen(port_http, () => {
+    console.log("HTTP app is running on port " + port_http);
+});
+// server_https.listen(port_https, () => {
+//     console.log("HTTPS app is running on port " + port_https);
+// });
+
+server_http.on('error', onError);
+server_http.on('listening', onListening);
+// server_https.on('error', onError);
+// server_https.on('listening', onListening);
+
+
+function normalizePort(val) {
+    var port = parseInt(val, 10);
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+    return false;
+}
+
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+    var bind = typeof port_http === 'string'
+        ? 'Pipe ' + port_http
+        : 'Port ' + port_http;
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+}
+
+function onListening() {
+    var addr = server_https.address();
+    var bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + port_http;
+    debug('Listening on ' + bind);
+}

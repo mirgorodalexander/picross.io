@@ -1,0 +1,35 @@
+{
+  "name": "PicrossJS",
+  "version": "1.0.0",
+  "author": "alexander mirgorod",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "engines": {
+    "node": "10.1.0",
+    "npm": "5.6.0"
+  },
+  "dependencies": {
+    "bhttp": "^1.2.4",
+    "bluebird": "^3.5.2",
+    "cheerio": "^1.0.0-rc.2",
+    "circular-json": "^0.5.9",
+    "connect-loki": "^1.1.0",
+    "cookie-parser": "^1.4.3",
+    "debug": "~2.6.9",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "fs": "0.0.1-security",
+    "html-convert": "^2.1.7",
+    "http-errors": "^1.6.3",
+    "https": "^1.0.0",
+    "lokijs": "^1.5.5",
+    "morgan": "^1.9.1",
+    "nonogram-solver": "^2.0.0",
+    "path": "^0.12.7",
+    "pug": "2.0.0-beta11",
+    "shortid": "^2.2.13",
+    "socket.io": "^2.2.0"
+  }
+}
